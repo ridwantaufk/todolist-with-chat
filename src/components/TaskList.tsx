@@ -19,10 +19,10 @@ export default function TaskList({ tasks, role }: TaskListProps) {
       try {
         const response = await fetch("/api/tasks", {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          credentials: "include",
         });
+
+        // console.log("response : ", response);
 
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");

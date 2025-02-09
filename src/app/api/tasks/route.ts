@@ -7,22 +7,30 @@ export const runtime = "nodejs";
 const prisma = new PrismaClient();
 
 export async function verifyToken(token: string) {
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
   try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-
     const { payload } = await jwtVerify(token, secret);
-
     const { userId, role } = payload as { userId: string; role: string };
-
     return { userId, role };
   } catch (error) {
     throw new Error("Invalid token");
   }
 }
 
+// ambil token dari cookie
+function getTokenFromCookie(req: NextRequest): string | null {
+  const cookieHeader = req.headers.get("cookie");
+  if (!cookieHeader) return null;
+  const tokenCookie = cookieHeader
+    .split("; ")
+    .find((cookie) => cookie.startsWith("token="));
+  return tokenCookie ? tokenCookie.split("=")[1] : null;
+}
+
 // GET: Ambil semua task
 export async function GET(req: NextRequest) {
-  const token = req.headers.get("Authorization")?.split(" ")[1]; // Extract token from Authorization header
+  const token = getTokenFromCookie(req);
+
   if (!token) {
     return NextResponse.json(
       { error: "Unauthorized: No token provided" },
@@ -31,19 +39,18 @@ export async function GET(req: NextRequest) {
   }
 
   const user = await verifyToken(token);
-  console.log("user info : ", user);
   if (!user || user.role !== "Lead") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
   const tasks = await prisma.task.findMany();
-  console.log("Fetched Tasks:", tasks);
   return NextResponse.json(tasks);
 }
 
 // POST: Buat task baru (hanya Lead)
 export async function POST(req: NextRequest) {
-  const token = req.headers.get("Authorization")?.split(" ")[1]; // Extract token from Authorization header
+  const token = getTokenFromCookie(req);
+
   if (!token) {
     return NextResponse.json(
       { error: "Unauthorized: No token provided" },
@@ -52,8 +59,6 @@ export async function POST(req: NextRequest) {
   }
 
   const user = await verifyToken(token);
-
-  const leadId = user.userId;
 
   if (!user || user.role !== "Lead") {
     return NextResponse.json(
@@ -70,7 +75,7 @@ export async function POST(req: NextRequest) {
         title,
         description,
         status: "Not Started",
-        leadId,
+        leadId: user.userId,
         teamId,
       },
     });
@@ -85,7 +90,8 @@ export async function POST(req: NextRequest) {
 
 // PUT: Update status task (hanya Team yang dapat mengubah statusnya)
 export async function PUT(req: NextRequest) {
-  const token = req.headers.get("Authorization")?.split(" ")[1];
+  const token = getTokenFromCookie(req);
+
   if (!token) {
     return NextResponse.json(
       { error: "Unauthorized: No token provided" },
