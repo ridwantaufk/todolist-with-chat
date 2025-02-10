@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("Team"); // Default role "Team"
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -14,6 +16,13 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+
+    if (!name || !email || !password || !confirmPassword || !role) {
+      setError("All fields are required");
+      setLoading(false);
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -26,7 +35,7 @@ export default function Register() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name, email, password, role }),
     });
 
     const data = await response.json();
@@ -43,6 +52,17 @@ export default function Register() {
     <div className="container">
       <h1>Register</h1>
       <form onSubmit={handleRegister} className="form">
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+
         <div>
           <label htmlFor="email">Email:</label>
           <input
@@ -74,6 +94,18 @@ export default function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+        </div>
+
+        <div>
+          <label htmlFor="role">Role:</label>
+          <select
+            id="role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="Lead">Lead</option>
+            <option value="Team">Team</option>
+          </select>
         </div>
 
         {error && <div className="error">{error}</div>}
