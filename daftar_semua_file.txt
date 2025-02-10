@@ -1,6 +1,7 @@
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\.env 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\package-lock.json 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\package.json 
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\postcss.config.js 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\README.md 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src 
@@ -8,9 +9,9 @@ D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\tailwind.config.js
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\tsconfig.json 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\migrations 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\schema.prisma 
-D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\migrations\20250208062420_init 
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\migrations\20250210063404_init 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\migrations\migration_lock.toml 
-D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\migrations\20250208062420_init\migration.sql 
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\prisma\migrations\20250210063404_init\migration.sql 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\lib 
@@ -24,6 +25,7 @@ D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\page.tsx
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\dashboard 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\tasks 
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\users 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\login 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\logout 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\register 
@@ -32,6 +34,7 @@ D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\logo
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\register\route.ts 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\dashboard\route.ts 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\tasks\route.ts 
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\users\route.ts 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\login 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\register 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\login\page.tsx 
@@ -40,4 +43,4 @@ D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\dashboard\pag
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskForm.tsx 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskList.tsx 
 D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\lib\auth.ts 
-D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\styles\globals.css 
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\styles\tailwind.css 
