@@ -8,36 +8,51 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  role     String // "Lead" atau "Team"
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   // "Lead" atau "Team"
 
-  leadTasks Task[] @relation(name: "LeadRelation")
-  teamTasks Task[] @relation(name: "TeamRelation")
+  leadTasks Task[]   @relation(name: "LeadRelation")
+  teamTasks Task[]   @relation(name: "TeamRelation")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Task {
   id        String   @id @default(uuid())
   title     String
+  status    TaskStatus
+  description String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  leadId String?
-  teamId String?
+  leadId    String?
+  teamId    String?
 
-  lead User?     @relation(name: "LeadRelation", fields: [leadId], references: [id])
-  team User?     @relation(name: "TeamRelation", fields: [teamId], references: [id])
-  logs TaskLog[] // ✅ Relasi balik ke TaskLog
+  lead      User?    @relation(name: "LeadRelation", fields: [leadId], references: [id])
+  team      User?    @relation(name: "TeamRelation", fields: [teamId], references: [id])
+  logs      TaskLog[]
+
+  @@index([leadId])
+  @@index([teamId])
 }
 
 model TaskLog {
   id          String   @id @default(uuid())
   taskId      String
-  action      String
+  action      String   // contoh: "Created", "Updated", "Status Changed"
   description String?
   timestamp   DateTime @default(now())
-  message     String   @default("")
-  task        Task     @relation(fields: [taskId], references: [id]) // ✅ Sudah benar
+  message     String   @default("") // deskripsi atau pesan log lebih detail
+  task        Task     @relation(fields: [taskId], references: [id])
+}
+
+enum TaskStatus {
+  NOT_STARTED
+  ON_PROGRESS
+  DONE
+  REJECT
 }

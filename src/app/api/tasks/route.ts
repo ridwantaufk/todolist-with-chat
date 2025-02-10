@@ -43,7 +43,16 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
-  const tasks = await prisma.task.findMany();
+  const tasks = await prisma.task.findMany({
+    where: {
+      leadId: user.userId, // Ambil hanya tugas yang dimiliki oleh Lead
+    },
+    include: {
+      lead: true, // Menyertakan informasi Lead
+      team: true, // Menyertakan informasi Team
+    },
+  });
+
   return NextResponse.json(tasks);
 }
 
@@ -74,8 +83,8 @@ export async function POST(req: NextRequest) {
       data: {
         title,
         description,
-        status: "Not Started",
-        leadId: user.userId,
+        status: "NOT_STARTED", // Menggunakan enum untuk status
+        leadId: user.userId, // Mengaitkan dengan Lead
         teamId,
       },
     });
@@ -122,6 +131,7 @@ export async function PUT(req: NextRequest) {
         taskId: id,
         action: "Status Updated",
         description,
+        message: `Task status updated to ${status}`, // Menambahkan pesan log
       },
     });
 

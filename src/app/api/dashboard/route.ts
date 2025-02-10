@@ -24,7 +24,7 @@ export async function GET(req: Request) {
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
-      select: { id: true, name: true }, // Hanya ambil ID & nama user
+      select: { id: true, name: true, role: true }, // Hanya ambil ID & nama user
     });
 
     if (!user) {
@@ -42,7 +42,7 @@ export async function GET(req: Request) {
     return NextResponse.json({
       id: user.id,
       name: user.name,
-      role: "Lead", // Hardcoded, sesuaikan jika ada role di DB
+      role: user.role,
       tasks,
     });
   } catch (error) {
