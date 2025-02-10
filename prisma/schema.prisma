@@ -8,28 +8,36 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   name     String
-  email    String  @unique
+  email    String @unique
   password String
-  role     String  // "Lead" atau "Team"
+  role     String // "Lead" atau "Team"
+
+  leadTasks Task[] @relation(name: "LeadRelation")
+  teamTasks Task[] @relation(name: "TeamRelation")
 }
 
 model Task {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  status      String   // "Not Started", "On Progress", "Done", "Reject"
-  leadId      String
-  teamId      String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leadId String?
+  teamId String?
+
+  lead User?     @relation(name: "LeadRelation", fields: [leadId], references: [id])
+  team User?     @relation(name: "TeamRelation", fields: [teamId], references: [id])
+  logs TaskLog[] // ✅ Relasi balik ke TaskLog
 }
 
 model TaskLog {
   id          String   @id @default(uuid())
   taskId      String
   action      String
-  description String
+  description String?
   timestamp   DateTime @default(now())
+  message     String   @default("")
+  task        Task     @relation(fields: [taskId], references: [id]) // ✅ Sudah benar
 }

@@ -28,6 +28,9 @@ export default function Dashboard() {
         }
 
         const data = await response.json();
+
+        console.log("data : ", data);
+
         setUser(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -78,7 +81,7 @@ export default function Dashboard() {
       {user?.role === "Lead" && <TaskForm onTaskCreated={handleTaskCreated} />}
 
       {/* Tampilkan daftar tugas berdasarkan peran user */}
-      <TaskList tasks={user?.tasks || []} role={user?.role || "Member"} />
+      <TaskList tasks={user?.tasks || []} role={user?.role || "Team"} />
 
       <button onClick={handleLogout}>Logout</button>
     </div>

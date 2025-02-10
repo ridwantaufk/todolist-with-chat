@@ -22,7 +22,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
           credentials: "include",
         });
 
-        // console.log("response : ", response);
+        console.log("response : ", response);
 
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");
