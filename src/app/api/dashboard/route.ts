@@ -37,7 +37,7 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log("API Response:", { user, tasks });
+    // console.log("API Response:", { user, tasks });
 
     return NextResponse.json({
       id: user.id,
