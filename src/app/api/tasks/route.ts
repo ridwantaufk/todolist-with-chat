@@ -97,7 +97,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT: Update status task (hanya Team yang dapat mengubah statusnya)
 export async function PUT(req: NextRequest) {
   const token = getTokenFromCookie(req);
 
@@ -110,9 +109,9 @@ export async function PUT(req: NextRequest) {
 
   const user = await verifyToken(token);
 
-  if (!user || user.role !== "Team") {
+  if (!user) {
     return NextResponse.json(
-      { error: "Unauthorized: Only Teams can update task status" },
+      { error: "Unauthorized: User not found or not authenticated." },
       { status: 403 }
     );
   }
@@ -122,16 +121,22 @@ export async function PUT(req: NextRequest) {
   try {
     const updatedTask = await prisma.task.update({
       where: { id },
-      data: { status, updatedAt: new Date() },
+      data: {
+        ...(status && { status }),
+        ...(description && { description }),
+        updatedAt: new Date(),
+      },
     });
 
-    // Catat perubahan status di task_logs
+    // Catat perubahan di task_logs
     await prisma.taskLog.create({
       data: {
         taskId: id,
-        action: "Status Updated",
+        action: description ? "Description Updated" : "Status Updated",
         description,
-        message: `Task status updated to ${status}`, // Menambahkan pesan log
+        message: description
+          ? "Task description updated"
+          : `Task status updated to ${status}`,
       },
     });
 
