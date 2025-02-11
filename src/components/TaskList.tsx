@@ -30,7 +30,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
@@ -214,9 +214,8 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                         visible ? "opacity-80" : "opacity-60"
                       } transition-opacity duration-500 ease-out whitespace-nowrap min-w-max`}
                     >
-                      <FaInfoCircle className="mr-1" /> {/* Icon info */}
-                      Press <span className="font-bold mx-1">Enter</span> to
-                      save or{" "}
+                      <FaInfoCircle className="mr-1" />
+                      Press <span className="font-bold mx-1">Enter</span>or{" "}
                       <span className="font-bold mx-1">click anywhere</span> to
                       save.
                     </div>

@@ -82,14 +82,14 @@ export default function Dashboard() {
         <div className="flex justify-between mb-6">
           <button
             onClick={() => router.push(`/users/edit/${user?.id}`)}
-            className="px-6 py-2 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transform transition-all duration-300 hover:scale-105"
+            className="px-6 py-2 bg-transparent border-2 border-green-600 text-green-600 rounded-full transition-all duration-300 hover:bg-green-600 hover:text-white hover:shadow-lg hover:shadow-green-500 active:scale-105"
           >
             Edit Profile
           </button>
 
           <button
             onClick={handleLogout}
-            className="px-6 py-2 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transform transition-all duration-300 hover:scale-105"
+            className="px-6 py-2 bg-transparent border-2 border-red-600 text-red-600 rounded-full transition-all duration-300 hover:bg-red-600 hover:text-white hover:shadow-lg hover:shadow-red-500 active:scale-105"
           >
             Logout
           </button>

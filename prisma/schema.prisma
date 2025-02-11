@@ -25,16 +25,18 @@ model Task {
   id        String   @id @default(uuid())
   title     String
   status    TaskStatus
-  description String?
+  description String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  leadId    String?
-  teamId    String?
+  leadId    String
+  teamId    String
 
   lead      User?    @relation(name: "LeadRelation", fields: [leadId], references: [id])
   team      User?    @relation(name: "TeamRelation", fields: [teamId], references: [id])
   logs      TaskLog[]
+
+  taskCode    String
 
   @@index([leadId])
   @@index([teamId])
