@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { FaInfoCircle } from "react-icons/fa";
 
 interface Task {
   id: string;
@@ -15,11 +16,25 @@ interface TaskListProps {
 export default function TaskList({ tasks, role }: TaskListProps) {
   const [taskList, setTaskList] = useState<Task[]>(tasks);
   const [editingTask, setEditingTask] = useState<string | null>(null);
+  const [editedTitle, setEditedTitle] = useState<string>("");
+  const [editingTitle, setEditingTitle] = useState<string>("");
   const [editedDescription, setEditedDescription] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [taskToSave, setTaskToSave] = useState<string | null>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (editingTitle !== null) {
+      setVisible(true);
+      const timer = setTimeout(() => {
+        setVisible(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [editingTitle]);
 
   const handleStatusChange = async (taskId: string, newStatus: string) => {
     try {
@@ -40,6 +55,50 @@ export default function TaskList({ tasks, role }: TaskListProps) {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleBlurTitle = (taskId: string) => {
+    const originalTitle =
+      taskList.find((task) => task.id === taskId)?.title || "";
+    const currentTitle = editedTitle.trim();
+
+    if (currentTitle !== originalTitle) {
+      handleSaveTitle(taskId);
+    } else {
+      setEditingTitle(null);
+    }
+  };
+
+  const handleSaveTitle = async (taskId: string) => {
+    if (isSaving) return;
+    setIsSaving(true);
+
+    try {
+      const res = await fetch(`/api/tasks`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id: taskId, title: editedTitle }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update title");
+
+      setTaskList((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId ? { ...task, title: editedTitle } : task
+        )
+      );
+      setEditingTitle(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleEditTitle = (taskId: string, currentTitle: string) => {
+    setEditingTitle(taskId);
+    setEditedTitle(currentTitle);
   };
 
   const handleEditDescription = (
@@ -111,6 +170,21 @@ export default function TaskList({ tasks, role }: TaskListProps) {
     setIsConfirmOpen(false);
   };
 
+  const getStatusStyles = (status: string) => {
+    switch (status) {
+      case "NOT_STARTED":
+        return "bg-gray-300 text-gray-800";
+      case "ON_PROGRESS":
+        return "bg-blue-300 text-blue-800";
+      case "DONE":
+        return "bg-green-300 text-green-800";
+      case "REJECT":
+        return "bg-red-300 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <h2 className="text-3xl font-bold text-center p-2 text-gray-600 mb-8 shadow-md">
@@ -124,14 +198,47 @@ export default function TaskList({ tasks, role }: TaskListProps) {
               key={task.id}
               className="bg-white p-6 rounded-lg shadow-xl border border-gray-200 transform transition-transform duration-300 hover:scale-105"
             >
-              <h3 className="text-xl font-bold text-gray-900">{task.title}</h3>
+              {editingTitle === task.id ? (
+                <div className="mt-4">
+                  <input
+                    type="text"
+                    className="mt-1 w-full bg-gray-50 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                    onBlur={() => handleBlurTitle(task.id)}
+                    autoFocus
+                  />
+                  {visible && (
+                    <div
+                      className={`text-[10px] text-neutral-200 bg-gray-950 m-1 px-2 py-1 rounded inline-flex items-center ${
+                        visible ? "opacity-80" : "opacity-60"
+                      } transition-opacity duration-500 ease-out whitespace-nowrap min-w-max`}
+                    >
+                      <FaInfoCircle className="mr-1" /> {/* Icon info */}
+                      Press <span className="font-bold mx-1">Enter</span> to
+                      save or{" "}
+                      <span className="font-bold mx-1">click anywhere</span> to
+                      save.
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <h3
+                  className="text-xl font-bold text-gray-900 cursor-pointer"
+                  onClick={() => handleEditTitle(task.id, task.title)}
+                >
+                  {task.title}
+                </h3>
+              )}
 
               <div className="mt-2">
                 <label className="text-sm font-semibold text-gray-700">
                   Status
                 </label>
                 <select
-                  className="mt-1 block w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={`mt-1 block w-full py-2 px-3 rounded-md ${getStatusStyles(
+                    task.status
+                  )} focus:outline-none focus:ring-0`}
                   value={task.status}
                   onChange={(e) => handleStatusChange(task.id, e.target.value)}
                 >
@@ -150,7 +257,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                   <div className="relative">
                     <textarea
                       ref={descRef}
-                      className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[200px] max-h-[500px] overflow-y-auto resize-none transition-all duration-300 transform scale-105 sticky top-4"
+                      className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[200px] max-h-[500px] overflow-y-auto resize-none transition-all duration-300 transform scale-105 sticky top-4"
                       value={editedDescription}
                       onChange={(e) => setEditedDescription(e.target.value)}
                       onBlur={() => handleBlur(task.id)}
@@ -235,7 +342,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
               </label>
               <textarea
                 ref={descRef}
-                className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[300px] max-h-[500px] overflow-y-auto resize-none"
+                className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[300px] max-h-[500px] overflow-y-auto resize-none"
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
                 onBlur={() => handleBlur(editingTask)}
