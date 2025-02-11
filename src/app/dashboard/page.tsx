@@ -81,15 +81,15 @@ export default function Dashboard() {
           Welcome, {user?.name || "Guest"}
         </h1>
 
-        {/* Jika user adalah Lead, menampilkn TaskForm */}
-        {user?.role === "Lead" && (
-          <TaskForm onTaskCreated={handleTaskCreated} />
-        )}
+        {/* Tombol Edit Profile di kiri dan Logout di kanan */}
+        <div className="flex justify-between mb-6">
+          <button
+            onClick={() => router.push(`/users/edit/${user?.id}`)}
+            className="px-6 py-2 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transform transition-all duration-300 hover:scale-105"
+          >
+            Edit Profile
+          </button>
 
-        {/* Tampilkan daftar tugas berdasarkan peran user */}
-        <TaskList tasks={user?.tasks || []} role={user?.role || "Team"} />
-
-        <div className="flex justify-center">
           <button
             onClick={handleLogout}
             className="px-6 py-2 bg-red-500 text-white rounded-lg shadow-lg hover:bg-red-600 transform transition-all duration-300 hover:scale-105"
@@ -97,6 +97,14 @@ export default function Dashboard() {
             Logout
           </button>
         </div>
+
+        {/* Jika user adalah Lead, tampilkan TaskForm */}
+        {user?.role === "Lead" && (
+          <TaskForm onTaskCreated={handleTaskCreated} />
+        )}
+
+        {/* Tampilkan daftar tugas berdasarkan peran user */}
+        <TaskList tasks={user?.tasks || []} role={user?.role || "Team"} />
       </div>
     </div>
   );
