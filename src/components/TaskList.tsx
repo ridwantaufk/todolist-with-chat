@@ -19,7 +19,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [taskToSave, setTaskToSave] = useState<string | null>(null);
-  const descRef = useRef<HTMLDivElement>(null);
+  const descRef = useRef<HTMLTextAreaElement>(null);
 
   const handleStatusChange = async (taskId: string, newStatus: string) => {
     try {
@@ -80,16 +80,6 @@ export default function TaskList({ tasks, role }: TaskListProps) {
     }
   };
 
-  const setCursorToEnd = (element: HTMLDivElement | null) => {
-    if (!element) return;
-    const range = document.createRange();
-    const selection = window.getSelection();
-    range.selectNodeContents(element);
-    range.collapse(false);
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-  };
-
   const handleBlur = (taskId: string) => {
     const originalDescription =
       taskList.find((task) => task.id === taskId)?.description.trim() || "";
@@ -123,9 +113,10 @@ export default function TaskList({ tasks, role }: TaskListProps) {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h2 className="text-3xl font-bold text-center text-gray-600 mb-8 shadow-md">
+      <h2 className="text-3xl font-bold text-center p-2 text-gray-600 mb-8 shadow-md">
         {role} Tasks
       </h2>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {taskList.length > 0 ? (
           taskList.map((task) => (
@@ -156,23 +147,18 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                   Description
                 </label>
                 {editingTask === task.id ? (
-                  <div>
-                    <div
+                  <div className="relative">
+                    <textarea
                       ref={descRef}
-                      contentEditable
-                      className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[50px] overflow-y-auto"
-                      onInput={(e) =>
-                        setEditedDescription(e.currentTarget.textContent || "")
-                      }
+                      className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[200px] max-h-[500px] overflow-y-auto resize-none transition-all duration-300 transform scale-105 sticky top-4"
+                      value={editedDescription}
+                      onChange={(e) => setEditedDescription(e.target.value)}
                       onBlur={() => handleBlur(task.id)}
-                      suppressContentEditableWarning={true}
-                    >
-                      {editedDescription}
-                    </div>
+                    />
                   </div>
                 ) : (
                   <p
-                    className="mt-1 text-gray-600 cursor-pointer hover:text-indigo-600 transition-all"
+                    className="mt-1 text-gray-600 cursor-pointer hover:text-indigo-600 transition-all min-h-[200px] max-h-[500px] overflow-y-auto"
                     onClick={() =>
                       handleEditDescription(task.id, task.description)
                     }
@@ -192,7 +178,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
 
       {/* MODAL KONFIRMASI */}
       {isConfirmOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 className="text-xl font-semibold text-gray-800">
               Save changes?
@@ -210,6 +196,62 @@ export default function TaskList({ tasks, role }: TaskListProps) {
               <button
                 className="bg-indigo-500 px-4 py-2 rounded-lg text-white hover:bg-indigo-600"
                 onClick={handleConfirmSave}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL EDIT DESCRIPTION */}
+      {editingTask && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl overflow-auto min-h-[500px]">
+            <h3 className="text-xl font-semibold text-gray-800">
+              Edit Task Description
+            </h3>
+            <div className="mt-4">
+              <label className="text-sm font-semibold text-gray-700">
+                Title
+              </label>
+              <p className="mt-1 text-gray-600">
+                {taskList.find((task) => task.id === editingTask)?.title}
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <label className="text-sm font-semibold text-gray-700">
+                Status
+              </label>
+              <p className="mt-1 text-gray-600">
+                {taskList.find((task) => task.id === editingTask)?.status}
+              </p>
+            </div>
+
+            <div className="mt-4 relative">
+              <label className="text-sm font-semibold text-gray-700">
+                Description
+              </label>
+              <textarea
+                ref={descRef}
+                className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[300px] max-h-[500px] overflow-y-auto resize-none"
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                onBlur={() => handleBlur(editingTask)}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-4">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-400"
+                onClick={handleCancelSave}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-indigo-500 px-4 py-2 rounded-lg text-white hover:bg-indigo-600"
+                onClick={() => handleSaveDescription(editingTask)}
               >
                 Save
               </button>
