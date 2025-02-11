@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   // Set cookie HTTP-only untuk token
   response.cookies.set("token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // pastikan di production menggunakan https
+    secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60, // 1 jam
     path: "/",
   });
