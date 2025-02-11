@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import "../../../styles/tailwind.css";
 
 export default function Login() {
@@ -9,26 +10,55 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    if (!email.trim() || !password.trim()) {
+      setError("Email dan password wajib diisi.");
+      setLoading(false);
+      return;
+    }
+
+    if (!validateEmail(email.trim())) {
+      setError("Format email tidak valid.");
+      setLoading(false);
+      return;
+    }
+
+    if (password.trim().length < 8) {
+      setError("Password must be at least 8 characters long.");
+      setLoading(false);
+      return;
+    }
 
     const response = await fetch("/api/auth/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
 
     const data = await response.json();
+
     if (response.ok) {
       document.cookie = `token=${data.token}; path=/;`;
-      router.push("/dashboard");
+      setSuccess(true);
+
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 2000);
     } else {
-      setError(data.error || "Login failed. Please try again.");
+      setError(data.error || "Login gagal. Coba lagi.");
     }
 
     setLoading(false);
@@ -40,6 +70,18 @@ export default function Login() {
         <h2 className="text-3xl font-extrabold text-center text-indigo-700 mb-6">
           Login
         </h2>
+
+        {success && (
+          <div className="mb-4 p-3 text-green-700 bg-green-200 border border-green-500 rounded-lg text-center">
+            Login berhasil! Mengalihkan ke dashboard...
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-4 p-3 text-red-700 bg-red-200 border border-red-500 rounded-lg text-center">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -76,8 +118,6 @@ export default function Login() {
             />
           </div>
 
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-
           <button
             type="submit"
             disabled={loading}
@@ -86,6 +126,16 @@ export default function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Belum punya akun?{" "}
+          <Link
+            href="/auth/register"
+            className="text-indigo-600 font-semibold hover:underline hover:text-indigo-800 transition-all duration-300"
+          >
+            Daftar di sini
+          </Link>
+        </p>
       </div>
     </div>
   );

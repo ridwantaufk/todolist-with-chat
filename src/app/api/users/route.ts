@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -24,6 +25,7 @@ function getTokenFromCookie(req: NextRequest): string | null {
   return tokenCookie ? tokenCookie.split("=")[1] : null;
 }
 
+// GET: Ambil daftar pengguna atau satu pengguna berdasarkan ID buat edit
 export async function GET(req: NextRequest) {
   const token = getTokenFromCookie(req);
   if (!token) {
@@ -38,25 +40,110 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get("id");
+
   try {
-    // Ambil hanya kolom 'name' dari semua pengguna
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
+    if (userId) {
+      const singleUser = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          password: true,
+        },
+      });
+
+      if (!singleUser) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      }
+
+      return NextResponse.json({
+        ...singleUser,
+        password: "******",
+      });
+    } else {
+      const users = await prisma.user.findMany({
+        select: { id: true, name: true },
+      });
+
+      return NextResponse.json({ users });
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch users" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT: Update data pengguna
+export async function PUT(req: NextRequest) {
+  const token = getTokenFromCookie(req);
+  if (!token) {
+    return NextResponse.json(
+      { error: "Unauthorized: No token provided" },
+      { status: 401 }
+    );
+  }
+
+  const user = await verifyToken(token);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  }
+
+  try {
+    const body = await req.json();
+    const { id, name, email, password } = body;
+    // console.log("id, name, email, password : ", id, name, email, password);
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "User ID is required." },
+        { status: 400 }
+      );
+    }
+    // console.log("user.userId : ", user.userId);
+
+    if (user.userId !== id) {
+      return NextResponse.json(
+        { error: "Forbidden: No permission" },
+        { status: 403 }
+      );
+    }
+
+    const existingUser = await prisma.user.findUnique({ where: { id } });
+
+    if (!existingUser) {
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
+
+    let hashedPassword = existingUser.password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        name: name || existingUser.name,
+        email: email || existingUser.email,
+        password: hashedPassword,
       },
     });
 
-    const loggedInUser = users.find((u) => u.id === user.userId);
-    // console.log("loggedInUser : ", loggedInUser);
-    return NextResponse.json({
-      users,
-      loggedInUser: loggedInUser
-        ? { id: loggedInUser.id, name: loggedInUser.name }
-        : null,
-    });
+    return NextResponse.json(
+      { message: "User updated successfully.", user: updatedUser },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error fetching users:", error);
-    return NextResponse.json("Failed to fetch users", { status: 500 });
+    console.error("Error updating user:", error);
+    return NextResponse.json(
+      { error: "Failed to update user." },
+      { status: 500 }
+    );
   }
 }
