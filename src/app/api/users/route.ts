@@ -69,7 +69,20 @@ export async function GET(req: NextRequest) {
         select: { id: true, name: true },
       });
 
-      return NextResponse.json({ users });
+      const userName = await prisma.user.findUnique({
+        where: { id: user.userId },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+      // console.log("userName : ", userName);
+
+      if (!userName) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      }
+
+      return NextResponse.json({ users, userName });
     }
   } catch (error) {
     console.error("Error fetching users:", error);

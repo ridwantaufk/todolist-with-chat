@@ -45,11 +45,11 @@ export async function GET(req: NextRequest) {
 
   const tasks = await prisma.task.findMany({
     where: {
-      leadId: user.userId, // Ambil hanya tugas yang dimiliki oleh Lead
+      leadId: user.userId,
     },
     include: {
-      lead: true, // Menyertakan informasi Lead
-      team: true, // Menyertakan informasi Team
+      lead: true, // menyertakan informasi Lead
+      team: true, // menyertakan informasi Team
     },
   });
 
@@ -76,16 +76,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { title, description, teamId } = await req.json();
+  const { title, status, description, leadId, teamId } = await req.json();
 
   try {
+    const existingTasks = await prisma.task.count();
+    const taskCode = `TASK-${existingTasks + 1}`;
+
     const newTask = await prisma.task.create({
       data: {
         title,
         description,
-        status: "NOT_STARTED", // Menggunakan enum untuk status
-        leadId: user.userId, // Mengaitkan dengan Lead
+        status,
+        leadId,
         teamId,
+        taskCode: taskCode,
       },
     });
     return NextResponse.json(newTask);
@@ -116,27 +120,57 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const { id, status, description } = await req.json();
+  const { id, title, status, description, leadId, teamId } = await req.json();
 
   try {
     const updatedTask = await prisma.task.update({
       where: { id },
       data: {
+        ...(title && { title }),
         ...(status && { status }),
         ...(description && { description }),
+        ...(leadId && { leadId }),
+        ...(teamId && { teamId }),
         updatedAt: new Date(),
       },
     });
+
+    const userName = await prisma.user
+      .findUnique({
+        where: { id: user.userId },
+        select: { name: true },
+      })
+      .then((user) => user?.name || "Unknown User");
 
     // Catat perubahan di task_logs
     await prisma.taskLog.create({
       data: {
         taskId: id,
-        action: description ? "Description Updated" : "Status Updated",
+        action: description
+          ? "Description Updated"
+          : status === "NOT_STARTED"
+          ? `Task Created (Status: ${status})`
+          : status === "ON_PROGRESS"
+          ? `Task Progressed (Status: ${status})`
+          : status === "DONE"
+          ? `Task Completed (Status: ${status})`
+          : status === "REJECT"
+          ? `Task Rejected (Status: ${status})`
+          : "Task Updated",
+
         description,
+
         message: description
-          ? "Task description updated"
-          : `Task status updated to ${status}`,
+          ? `Task description updated with new details: ${description} by ${userName}`
+          : status === "NOT_STARTED"
+          ? `Task created with status: ${status} by ${userName}`
+          : status === "ON_PROGRESS"
+          ? `Task is now in progress with status: ${status} by ${userName}`
+          : status === "DONE"
+          ? `Task completed with status: ${status} by ${userName}`
+          : status === "REJECT"
+          ? `Task rejected with status: ${status} by ${userName}`
+          : `Task status updated to: ${status} by ${userName}`,
       },
     });
 
