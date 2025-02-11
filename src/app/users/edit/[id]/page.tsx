@@ -75,7 +75,6 @@ export default function EditUser() {
       return;
     }
 
-    // Jika password diubah (bukan "*******"), validasi panjangnya
     const updatedData: any = {
       id: userId,
       name: user.name,
@@ -138,7 +137,7 @@ export default function EditUser() {
         <form onSubmit={handleUpdate} className="space-y-4">
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
-              Name:
+              Name
             </label>
             <input
               type="text"
@@ -150,7 +149,7 @@ export default function EditUser() {
 
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
-              Email:
+              Email
             </label>
             <input
               type="email"
@@ -162,7 +161,7 @@ export default function EditUser() {
 
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
-              Role:
+              Role
             </label>
             <select
               value={user.role}
@@ -177,7 +176,7 @@ export default function EditUser() {
 
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
-              Password (Optional):
+              Password (Optional)
             </label>
             <input
               type="password"
@@ -186,6 +185,12 @@ export default function EditUser() {
                 if (!isPasswordChanged) {
                   setUser({ ...user, password: "" }); // Kosongkan input saat pertama kali diklik
                   setIsPasswordChanged(true);
+                }
+              }}
+              onBlur={() => {
+                if (!user.password) {
+                  setUser({ ...user, password: "Default123" }); // Kembalikan ke default jika kosong
+                  setIsPasswordChanged(false);
                 }
               }}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
@@ -202,6 +207,13 @@ export default function EditUser() {
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-indigo-700 transition-all duration-300"
           >
             {loading ? "Updating..." : "Update"}
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard")}
+            className="w-full bg-gray-500 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-gray-600 transition-all duration-300 mt-2"
+          >
+            Back to Dashboard
           </button>
         </form>
       </div>
