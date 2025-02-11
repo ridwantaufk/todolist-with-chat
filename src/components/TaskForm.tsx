@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import "../styles/tailwind.css";
-
 interface User {
   id: string;
   name: string;
@@ -15,8 +13,8 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("NOT_STARTED");
   const [assignedTo, setAssignedTo] = useState<string | null>(null);
-  const [createdBy, setCreatedBy] = useState<User | null>(null); // Menggunakan tipe User untuk createdBy
-  const [users, setUsers] = useState<User[]>([]); // Menetapkan tipe array of User untuk users
+  const [createdBy, setCreatedBy] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -26,8 +24,8 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
           const data = await response.json();
           console.log("data.loggedInUser : ", data.loggedInUser);
 
-          setUsers(data.users); // Mengakses array users dari objek response
-          setCreatedBy(data.loggedInUser); // Pastikan loggedInUser adalah objek yang sesuai
+          setUsers(data.users);
+          setCreatedBy(data.loggedInUser);
         } else {
           console.error("Failed to fetch users");
         }

@@ -1,5 +1,3 @@
-import "../styles/tailwind.css";
-
 interface Task {
   id: string;
   title: string;
