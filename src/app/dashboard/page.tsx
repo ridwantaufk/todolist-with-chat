@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import TaskForm from "../../components/TaskForm";
 import TaskList from "../../components/TaskList";
+import "../../styles/tailwind.css";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
