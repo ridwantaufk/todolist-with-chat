@@ -12,31 +12,26 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      String   // "Lead" atau "Team"
-
-  leadTasks Task[]   @relation(name: "LeadRelation")
-  teamTasks Task[]   @relation(name: "TeamRelation")
-
+  role      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  leadTasks Task[]   @relation("LeadRelation")
+  teamTasks Task[]   @relation("TeamRelation")
 }
 
 model Task {
-  id        String   @id @default(uuid())
-  title     String
-  status    TaskStatus
+  id          String     @id @default(uuid())
+  title       String
+  status      TaskStatus
   description String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  leadId    String
-  teamId    String
-
-  lead      User?    @relation(name: "LeadRelation", fields: [leadId], references: [id])
-  team      User?    @relation(name: "TeamRelation", fields: [teamId], references: [id])
-  logs      TaskLog[]
-
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  leadId      String
+  teamId      String
   taskCode    String
+  lead        User       @relation("LeadRelation", fields: [leadId], references: [id])
+  team        User       @relation("TeamRelation", fields: [teamId], references: [id])
+  logs        TaskLog[]
 
   @@index([leadId])
   @@index([teamId])
@@ -45,10 +40,10 @@ model Task {
 model TaskLog {
   id          String   @id @default(uuid())
   taskId      String
-  action      String   // contoh: "Created", "Updated", "Status Changed"
+  action      String
   description String?
   timestamp   DateTime @default(now())
-  message     String   @default("") // deskripsi atau pesan log lebih detail
+  message     String   @default("")
   task        Task     @relation(fields: [taskId], references: [id])
 }
 
@@ -57,4 +52,11 @@ enum TaskStatus {
   ON_PROGRESS
   DONE
   REJECT
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  text      String
+  sender    String   @default("user")
+  createdAt DateTime @default(now())
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 interface User {
   id: string;
   name: string;
+  role: string;
 }
 
 interface TaskFormProps {
@@ -94,7 +95,7 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
       </h2>
 
       <div className="space-y-4">
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <label className="block text-sm font-medium text-gray-900 mb-1">
             Title
           </label>
@@ -104,11 +105,11 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
             required
-            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
+            className="w-full p-2 border border-gray-200 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
           />
         </div>
 
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <label className="block text-sm font-medium text-gray-900 mb-1">
             Status
           </label>
@@ -118,12 +119,12 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
             className={`w-full p-2 border-2 rounded-md focus:outline-none transition duration-200
     ${
       status === ""
-        ? "bg-transparent text-gray-900 border-gray-300 font-bold"
+        ? "bg-transparent text-gray-900 border-gray-200 font-bold"
         : ""
     }
     ${
       status === "NOT_STARTED"
-        ? "bg-gray-300 text-gray-800 border-gray-300"
+        ? "bg-gray-300 text-gray-800 border-gray-200"
         : ""
     }
     ${
@@ -133,7 +134,7 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
     }
     ${status === "DONE" ? "bg-green-300 text-green-800 border-green-300" : ""}
     ${status === "REJECT" ? "bg-red-300 text-red-800 border-red-300" : ""}
-    ${status === "" ? "bg-gray-100 text-gray-800 border-gray-300" : ""}
+    ${status === "" ? "bg-white text-gray-800 border-gray-200" : ""}
     font-bold`}
             style={{
               appearance: "none",
@@ -150,7 +151,7 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
           </select>
         </div>
 
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <label className="block text-sm font-medium text-gray-900 mb-1">
             Description
           </label>
@@ -158,30 +159,47 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
             value={description}
             placeholder="Description"
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
+            className="w-full p-2 border border-gray-200 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
             rows={4}
           />
         </div>
 
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <label className="block text-sm font-medium text-gray-900 mb-1">
             Assigned To
           </label>
           <select
             value={assignedTo || ""}
             onChange={(e) => setAssignedTo(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
+            className="w-full p-2 border border-gray-200 rounded-md bg-white text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
           >
             <option value="">Select a user</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
+
+            {/* Lead Group */}
+            <optgroup label="Leads" className="not-italic font-medium">
+              {users
+                .filter((user) => user.role === "Lead")
+                .map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+            </optgroup>
+
+            {/* Team Group */}
+            <optgroup label="Teams" className="not-italic font-medium">
+              {users
+                .filter((user) => user.role === "Team")
+                .map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+            </optgroup>
           </select>
         </div>
 
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <label className="block text-sm font-medium text-gray-900 mb-1">
             Created By
           </label>
@@ -192,14 +210,31 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
                 users.find((user) => user.id === e.target.value) || null
               )
             }
-            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
+            className="w-full p-2 border border-gray-200 rounded-md bg-white text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200"
           >
             <option value="">Select a user</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
+
+            {/* Lead Group */}
+            <optgroup label="Leads" className="not-italic">
+              {users
+                .filter((user) => user.role === "Lead")
+                .map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+            </optgroup>
+
+            {/* Team Group */}
+            <optgroup label="Team Members" className="not-italic">
+              {users
+                .filter((user) => user.role === "Team")
+                .map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+            </optgroup>
           </select>
         </div>
       </div>

@@ -51,10 +51,10 @@ const getStatusStyle = (status: string) => {
 };
 
 const formatStatus = (status: string) => {
-  if (status.includes("NOT_STARTED")) return "Not Started";
-  if (status.includes("ON_PROGRESS")) return "In Progress";
-  if (status.includes("DONE")) return "Completed";
-  if (status.includes("REJECT")) return "Rejected";
+  if (status.includes("Not Started")) return "Not Started";
+  if (status.includes("Progressed")) return "On Progress";
+  if (status.includes("Completed")) return "Done";
+  if (status.includes("Rejected")) return "Reject";
   return status;
 };
 
