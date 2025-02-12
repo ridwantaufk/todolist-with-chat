@@ -5,13 +5,28 @@ import { useRouter } from "next/navigation";
 import TaskForm from "../../components/TaskForm";
 import TaskList from "../../components/TaskList";
 import TaskLog from "../../components/TaskLog";
+import Chat from "../../components/Communication/Chat";
 import "../../styles/tailwind.css";
+import { FiLogOut } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isTaskLogOpen, setIsTaskLogOpen] = useState(false);
   const router = useRouter();
+
+  const handleEditProfile = async () => {
+    setIsLoading(true);
+
+    // Simulate a loading delay (e.g., fetching data)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    router.push(`/users/edit/${user?.id}`);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -70,32 +85,80 @@ export default function Dashboard() {
   };
 
   if (loading)
-    return <div className="text-center text-2xl text-gray-600">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center text-2xl text-gray-600">Loading...</div>
+      </div>
+    );
 
   return (
     <div className="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen text-white py-10">
-      <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl p-8 px-6 space-y-6">
+      <div className="fixed bottom-10 right-10 z-50">
+        <Chat />
+      </div>
+      <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl p-8 px-6 space-y-4">
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-6">
           Welcome, {user?.name || "Guest"}
         </h1>
 
         <div className="flex justify-between mb-6">
           <button
-            onClick={() => router.push(`/users/edit/${user?.id}`)}
-            className="px-6 py-2 bg-transparent border-2 border-green-600 text-green-600 rounded-full transition-all duration-300 hover:bg-green-600 hover:text-white hover:shadow-lg hover:shadow-green-500 active:scale-105"
+            onClick={handleEditProfile}
+            className={`px-5 py-2 flex items-center gap-2 rounded-lg 
+              backdrop-blur-lg border border-green-500 text-green-500 
+              shadow-md shadow-green-500/20 transition-all duration-300 
+              ${
+                isLoading
+                  ? "cursor-not-allowed opacity-60"
+                  : "hover:bg-green-600 hover:text-white hover:shadow-green-500/40 active:scale-95"
+              }`}
+            disabled={isLoading}
           >
-            Edit Profile
+            {isLoading ? (
+              <div className="flex items-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-green-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 100 8v4a8 8 0 01-8-8z"
+                  />
+                </svg>
+                Loading...
+              </div>
+            ) : (
+              <>
+                <FiEdit size={18} />
+                Edit Profile
+              </>
+            )}
           </button>
-
           <button
             onClick={handleLogout}
-            className="px-6 py-2 bg-transparent border-2 border-red-600 text-red-600 rounded-full transition-all duration-300 hover:bg-red-600 hover:text-white hover:shadow-lg hover:shadow-red-500 active:scale-105"
+            className="px-5 py-2 flex items-center gap-2 
+             bg-transparent border border-red-500 text-red-500 
+             rounded-lg backdrop-blur-lg shadow-md shadow-red-500/20 
+             transition-all duration-300 hover:bg-red-600 hover:text-white 
+             hover:shadow-red-500/40 active:scale-95"
           >
+            <FiLogOut size={18} />
             Logout
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 relative">
           <div
             className={`${
               user?.role === "Lead" && isTaskLogOpen
@@ -125,8 +188,10 @@ export default function Dashboard() {
           )}
 
           <div
-            className={`lg:col-span-1 transform transition-all duration-500 ${
-              isTaskLogOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            className={`lg:col-span-1 transform transition-all duration-300 ${
+              isTaskLogOpen
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 hidden"
             }`}
             style={{
               maxHeight: "calc(100vh - 4rem)",

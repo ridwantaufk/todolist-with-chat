@@ -110,19 +110,6 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
 
         <div className="bg-gray-100 p-4 rounded-lg shadow-md">
           <label className="block text-sm font-medium text-gray-900 mb-1">
-            Description
-          </label>
-          <textarea
-            value={description}
-            placeholder="Description"
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
-            rows={4}
-          />
-        </div>
-
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-          <label className="block text-sm font-medium text-gray-900 mb-1">
             Status
           </label>
           <select
@@ -161,6 +148,19 @@ export default function TaskForm({ onTaskCreated }: TaskFormProps) {
             <option value="DONE">Done</option>
             <option value="REJECT">Reject</option>
           </select>
+        </div>
+
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+          <label className="block text-sm font-medium text-gray-900 mb-1">
+            Description
+          </label>
+          <textarea
+            value={description}
+            placeholder="Description"
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 text-gray-900"
+            rows={4}
+          />
         </div>
 
         <div className="bg-gray-100 p-4 rounded-lg shadow-md">

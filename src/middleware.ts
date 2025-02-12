@@ -19,10 +19,13 @@ export async function middleware(req: NextRequest) {
 
   if (!token) {
     console.error("No token found in cookies");
-    return new Response(
-      JSON.stringify({ error: "Unauthorized: No token provided" }),
-      { status: 401, headers: { "Content-Type": "application/json" } }
-    );
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.pathname = "/auth/login";
+    return NextResponse.redirect(redirectUrl, 302);
+    // return new Response(
+    //   JSON.stringify({ error: "Unauthorized: No token provided" }),
+    //   { status: 401, headers: { "Content-Type": "application/json" } }
+    // );
   }
 
   try {
