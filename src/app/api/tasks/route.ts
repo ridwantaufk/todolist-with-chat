@@ -92,6 +92,24 @@ export async function POST(req: NextRequest) {
         taskCode: taskCode,
       },
     });
+
+    // mencatat log pas tugas baru dibuat
+    const userName = await prisma.user
+      .findUnique({
+        where: { id: user.userId },
+        select: { name: true },
+      })
+      .then((user) => user?.name || "Unknown User");
+
+    await prisma.taskLog.create({
+      data: {
+        taskId: newTask.id,
+        action: "Task Created",
+        description,
+        message: `Task created with title: ${title} by ${userName}`,
+      },
+    });
+
     return NextResponse.json(newTask);
   } catch (error) {
     return NextResponse.json(
@@ -142,20 +160,35 @@ export async function PUT(req: NextRequest) {
       })
       .then((user) => user?.name || "Unknown User");
 
-    // Catat perubahan di task_logs
+    function getStatusText(status) {
+      switch (status) {
+        case "NOT_STARTED":
+          return "Not Started";
+        case "ON_PROGRESS":
+          return "On Progress";
+        case "DONE":
+          return "Completed";
+        case "REJECT":
+          return "Rejected";
+        default:
+          return "Unknown Status";
+      }
+    }
+
+    // Contoh penggunaan dalam taskLog
     await prisma.taskLog.create({
       data: {
         taskId: id,
         action: description
           ? "Description Updated"
           : status === "NOT_STARTED"
-          ? `Task Created (Status: ${status})`
+          ? `Task Created (Status: ${getStatusText(status)})`
           : status === "ON_PROGRESS"
-          ? `Task Progressed (Status: ${status})`
+          ? `Task Progressed (Status: ${getStatusText(status)})`
           : status === "DONE"
-          ? `Task Completed (Status: ${status})`
+          ? `Task Completed (Status: ${getStatusText(status)})`
           : status === "REJECT"
-          ? `Task Rejected (Status: ${status})`
+          ? `Task Rejected (Status: ${getStatusText(status)})`
           : "Task Updated",
 
         description,
@@ -163,14 +196,18 @@ export async function PUT(req: NextRequest) {
         message: description
           ? `Task description updated with new details: ${description} by ${userName}`
           : status === "NOT_STARTED"
-          ? `Task created with status: ${status} by ${userName}`
+          ? `Task created with status: ${getStatusText(status)} by ${userName}`
           : status === "ON_PROGRESS"
-          ? `Task is now in progress with status: ${status} by ${userName}`
+          ? `Task is now on progress with status: ${getStatusText(
+              status
+            )} by ${userName}`
           : status === "DONE"
-          ? `Task completed with status: ${status} by ${userName}`
+          ? `Task completed with status: ${getStatusText(
+              status
+            )} by ${userName}`
           : status === "REJECT"
-          ? `Task rejected with status: ${status} by ${userName}`
-          : `Task status updated to: ${status} by ${userName}`,
+          ? `Task rejected with status: ${getStatusText(status)} by ${userName}`
+          : `Task status updated to: ${getStatusText(status)} by ${userName}`,
       },
     });
 

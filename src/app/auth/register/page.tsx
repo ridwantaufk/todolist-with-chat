@@ -21,6 +21,17 @@ export default function Register() {
     return emailRegex.test(email);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // huruf awal setiap kata menjadi kapital
+    const formattedValue = value
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    setName(formattedValue);
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -112,7 +123,7 @@ export default function Register() {
             className="w-full p-2 border rounded-lg"
             placeholder="Name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleChange}
             required
           />
           <input

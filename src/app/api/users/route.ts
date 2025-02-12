@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
       });
     } else {
       const users = await prisma.user.findMany({
-        select: { id: true, name: true },
+        select: { id: true, name: true, role: true },
       });
 
       const userName = await prisma.user.findUnique({
