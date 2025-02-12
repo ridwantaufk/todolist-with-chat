@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "../../../styles/tailwind.css";
+import { FiUserPlus } from "react-icons/fi";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -88,7 +89,7 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-lg p-8">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-lg p-8 transform transition-all duration-500 hover:scale-105">
         <h2 className="text-3xl font-extrabold text-center text-indigo-700 mb-6">
           Register
         </h2>
@@ -117,7 +118,7 @@ export default function Register() {
           <input
             type="email"
             className="w-full p-2 border rounded-lg"
-            placeholder="Email"
+            placeholder="Email (ex: name@example.com)"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -150,11 +151,39 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            className={`w-full flex items-center gap-2 justify-center px-5 py-2 
+              rounded-lg font-bold text-lg transition-all duration-300 
+              backdrop-blur-lg border border-indigo-500 text-indigo-500 
+              shadow-md shadow-indigo-500/20 
+              ${
+                loading
+                  ? "cursor-not-allowed opacity-60 bg-gray-400 text-gray-700"
+                  : "hover:bg-indigo-600 hover:text-white hover:shadow-indigo-500/40 active:scale-95"
+              }`}
           >
-            {loading ? "Registering..." : "Register"}
+            {loading ? (
+              <>
+                <FiUserPlus className="animate-pulse" size={18} />
+                Registering...
+              </>
+            ) : (
+              <>
+                <FiUserPlus size={18} />
+                Register
+              </>
+            )}
           </button>
         </form>
+
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{" "}
+          <a
+            href="/auth/login"
+            className="text-indigo-600 font-semibold hover:underline hover:text-indigo-800 transition-all duration-300"
+          >
+            Login
+          </a>
+        </p>
       </div>
     </div>
   );

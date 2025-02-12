@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import "../../../styles/tailwind.css";
+import { FiLogIn } from "react-icons/fi";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -94,14 +95,13 @@ export default function Login() {
             <input
               type="email"
               id="email"
-              placeholder="example@example.com"
+              placeholder="Email (ex: name@example.com)"
               className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-
           <div>
             <label
               htmlFor="password"
@@ -123,19 +123,37 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transform transition-all duration-300 hover:scale-105 disabled:bg-gray-400"
+            className={`w-full flex items-center gap-2 justify-center px-5 py-2 
+              rounded-lg font-bold text-lg transition-all duration-300 
+              backdrop-blur-lg border border-indigo-500 text-indigo-500 
+              shadow-md shadow-indigo-500/20 
+              ${
+                loading
+                  ? "cursor-not-allowed opacity-60 bg-gray-400 text-gray-700"
+                  : "hover:bg-indigo-600 hover:text-white hover:shadow-indigo-500/40 active:scale-95"
+              }`}
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? (
+              <>
+                <FiLogIn className="animate-pulse" size={18} />
+                Logging in...
+              </>
+            ) : (
+              <>
+                <FiLogIn size={18} />
+                Login
+              </>
+            )}
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-600">
-          Belum punya akun?{" "}
+          Don't have an account?{" "}
           <Link
             href="/auth/register"
             className="text-indigo-600 font-semibold hover:underline hover:text-indigo-800 transition-all duration-300"
           >
-            Daftar di sini
+            Register here
           </Link>
         </p>
       </div>

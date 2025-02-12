@@ -48,10 +48,16 @@ export async function GET(req: NextRequest) {
       timestamp: "desc",
     },
     include: {
-      task: true, // Menyertakan data task terkait
+      task: {
+        select: {
+          taskCode: true,
+          lead: { select: { name: true } },
+          team: { select: { name: true } },
+        },
+      },
     },
   });
-  //   console.log("taskLogs : ", taskLogs);
+
   return NextResponse.json(taskLogs);
 }
 

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import "../../../../styles/tailwind.css";
+import { FiRefreshCw } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 
 export default function EditUser() {
   const router = useRouter();
@@ -35,9 +37,9 @@ export default function EditUser() {
           name: data.name,
           email: data.email,
           role: data.role,
-          password: "Default123", // Password default
+          password: "Default123",
         });
-        setIsPasswordChanged(false); // Reset saat pertama kali load
+        setIsPasswordChanged(false);
         setLoading(false);
       } catch (err) {
         setError("Error loading user data");
@@ -113,7 +115,12 @@ export default function EditUser() {
     }
   }
 
-  if (loading) return <div className="text-center text-2xl">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center text-2xl text-gray-600">Loading...</div>
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center p-5">
@@ -146,7 +153,6 @@ export default function EditUser() {
               className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
-
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Email
@@ -158,7 +164,6 @@ export default function EditUser() {
               className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
-
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Role
@@ -173,7 +178,6 @@ export default function EditUser() {
               <option value="Team">Team</option>
             </select>
           </div>
-
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Password (Optional)
@@ -183,13 +187,13 @@ export default function EditUser() {
               value={user.password}
               onFocus={() => {
                 if (!isPasswordChanged) {
-                  setUser({ ...user, password: "" }); // Kosongkan input saat pertama kali diklik
+                  setUser({ ...user, password: "" });
                   setIsPasswordChanged(true);
                 }
               }}
               onBlur={() => {
                 if (!user.password) {
-                  setUser({ ...user, password: "Default123" }); // Kembalikan ke default jika kosong
+                  setUser({ ...user, password: "Default123" });
                   setIsPasswordChanged(false);
                 }
               }}
@@ -200,19 +204,41 @@ export default function EditUser() {
               <p className="text-red-500 text-sm mt-1">{passwordError}</p>
             )}
           </div>
-
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-indigo-700 transition-all duration-300"
+            className={`w-full flex items-center gap-2 justify-center px-5 py-2 
+              rounded-lg font-bold text-lg transition-all duration-300 
+              backdrop-blur-lg border border-indigo-500 text-indigo-500 
+              shadow-md shadow-indigo-500/20 
+              ${
+                loading
+                  ? "cursor-not-allowed opacity-60"
+                  : "hover:bg-indigo-600 hover:text-white hover:shadow-indigo-500/40 active:scale-95"
+              }`}
           >
-            {loading ? "Updating..." : "Update"}
+            {loading ? (
+              <>
+                <FiRefreshCw className="animate-spin" size={18} />
+                Updating...
+              </>
+            ) : (
+              <>
+                <FiRefreshCw size={18} />
+                Update
+              </>
+            )}
           </button>
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="w-full bg-gray-500 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:bg-gray-600 transition-all duration-300 mt-2"
+            className="w-full flex items-center gap-2 justify-center px-5 py-2 
+             rounded-lg font-bold text-lg transition-all duration-300 
+             backdrop-blur-lg border border-gray-500 text-gray-500 
+             shadow-md shadow-gray-500/20 
+             hover:bg-gray-600 hover:text-white hover:shadow-gray-500/40 active:scale-95"
           >
+            <FiArrowLeft size={18} />
             Back to Dashboard
           </button>
         </form>
