@@ -9,9 +9,12 @@ import Chat from "../../components/Communication/Chat";
 import "../../styles/tailwind.css";
 import { FiLogOut } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
+import { FaBell } from "react-icons/fa";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
+  const [isChatVisible, setIsChatVisible] = useState(false);
+  const [hasNewMessage, setHasNewMessage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,7 +24,6 @@ export default function Dashboard() {
   const handleEditProfile = async () => {
     setIsLoading(true);
 
-    // Simulate a loading delay (e.g., fetching data)
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     router.push(`/users/edit/${user?.id}`);
@@ -72,6 +74,7 @@ export default function Dashboard() {
   };
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/auth/logout", { method: "POST" });
       if (response.ok) {
@@ -81,20 +84,51 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    const handleNewMessage = () => {
+      if (!isChatVisible) {
+        setHasNewMessage(true);
+        playNotificationSound();
+      }
+    };
+    window.addEventListener("newChatMessage", handleNewMessage);
+
+    return () => {
+      window.removeEventListener("newChatMessage", handleNewMessage);
+    };
+  }, [isChatVisible]);
+
+  const playNotificationSound = () => {
+    const audio = new Audio("/sounds/iphone-notif.mp3");
+    audio.play();
   };
 
   if (loading)
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center text-2xl text-gray-600">Loading...</div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-white animate-gradient">
+        <div className="loader"></div>
+        <div className="loading-text">Loading</div>
       </div>
     );
 
   return (
     <div className="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen text-white py-10">
-      <div className="fixed bottom-10 right-10 z-50">
-        <Chat />
+      <div className="fixed bottom-10 right-10 z-40">
+        {hasNewMessage && (
+          <FaBell
+            className="absolute -top-2 -right-2 text-red-500 animate-bounce"
+            size={20}
+          />
+        )}
+        <Chat
+          isChatVisible={isChatVisible}
+          setIsChatVisible={setIsChatVisible}
+        />{" "}
       </div>
       <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl p-8 px-6 space-y-4">
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-6">
