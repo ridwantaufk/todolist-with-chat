@@ -26,16 +26,18 @@ const Message = ({ user, senderId, receiverId, text }: MessageProps) => {
 
   return (
     <div className="flex flex-col space-y-1">
+      {/* pengirim */}
       {isSender && (
-        <div className="flex px-1 justify-end">
-          <div className="p-2 rounded-lg max-w-xs text-sm bg-blue-500 text-white self-end">
+        <div className="flex justify-end">
+          <div className="p-2 max-w-xs text-sm bg-blue-500 text-white rounded-lg">
             {text}
           </div>
         </div>
       )}
+      {/* penerima */}
       {isReceiver && (
         <div className="flex justify-start">
-          <div className="p-2 rounded-lg max-w-xs text-sm bg-purple-700 text-white self-start">
+          <div className="p-2 max-w-xs text-sm bg-purple-700 text-white rounded-lg">
             {text}
           </div>
         </div>

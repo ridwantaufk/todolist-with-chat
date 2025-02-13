@@ -163,18 +163,37 @@ export default function Register() {
             type="submit"
             disabled={loading}
             className={`w-full flex items-center gap-2 justify-center px-5 py-2 
-              rounded-lg font-bold text-lg transition-all duration-300 
-              backdrop-blur-lg border border-indigo-500 text-indigo-500 
-              shadow-md shadow-indigo-500/20 
-              ${
-                loading
-                  ? "cursor-not-allowed opacity-60 bg-gray-400 text-gray-700"
-                  : "hover:bg-indigo-600 hover:text-white hover:shadow-indigo-500/40 active:scale-95"
-              }`}
+    rounded-lg font-bold text-lg transition-all duration-300 
+    backdrop-blur-lg border border-green-500 text-green-500 
+    shadow-md shadow-green-500/20 
+    ${
+      loading
+        ? "cursor-not-allowed opacity-60 bg-white text-green-500 "
+        : "hover:bg-green-600 hover:text-white hover:shadow-green-500/40 active:scale-95"
+    }`}
           >
             {loading ? (
               <>
-                <FiUserPlus className="animate-pulse" size={18} />
+                <svg
+                  className="animate-spin h-5 w-5 text-green-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 100 8v4a8 8 0 01-8-8z"
+                  />
+                </svg>
                 Registering...
               </>
             ) : (

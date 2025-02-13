@@ -2,3 +2,87 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* efek loading */
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3); /* Lingkaran luar */
+  border-top: 8px solid #4f46e5; /* Lingkaran atas */
+  border-radius: 50%;
+  width: 60px; /* Ukuran lingkaran */
+  height: 60px; /* Ukuran lingkaran */
+  animation: spin 1s linear infinite; /* Animasi berputar */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: 20px; /* Jarak antara lingkaran dan teks */
+  font-size: 24px; /* Ukuran font */
+  color: #ffffff; /* Warna teks */
+  position: relative;
+}
+
+.loading-text::after {
+  content: ".";
+  animation: dot 1s steps(5, end) infinite;
+}
+
+@keyframes dot {
+  0% {
+    content: "";
+  }
+  10% {
+    content: ".";
+  }
+  20% {
+    content: "..";
+  }
+  30% {
+    content: "...";
+  }
+  40% {
+    content: "....";
+  }
+  50% {
+    content: "....";
+  }
+  60% {
+    content: "....";
+  }
+  70% {
+    content: "...";
+  }
+  80% {
+    content: "..";
+  }
+  90% {
+    content: ".";
+  }
+  100% {
+    content: "";
+  }
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 300% 300%;
+  animation: gradient-animation 5s ease infinite;
+}

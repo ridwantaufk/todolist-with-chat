@@ -69,10 +69,10 @@ export async function GET(req: NextRequest) {
             orderBy: { createdAt: "asc" },
           });
 
-          console.log("🔔 Sending messages:", messages);
+          console.log("sending messages:", messages);
           controller.enqueue(`data: ${JSON.stringify(messages)}\n\n`);
         } catch (error) {
-          console.error("❌ Error fetching messages:", error);
+          console.error("error fetching messages:", error);
           controller.enqueue(
             `data: ${JSON.stringify({ error: "Error fetching messages" })}\n\n`
           );

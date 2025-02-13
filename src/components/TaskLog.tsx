@@ -93,9 +93,27 @@ const TaskLog = () => {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-pulse text-center text-2xl text-gray-600">
-            Loading...
-          </div>
+          <svg
+            className="animate-spin h-8 w-8 text-indigo-600"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 100 8v4a8 8 0 01-8-8z"
+            />
+          </svg>
+          <span className="ml-2">Loading...</span>
         </div>
       ) : (
         <ul className="space-y-4">
