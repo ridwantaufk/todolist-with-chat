@@ -1,23 +1,45 @@
-interface MessageProps {
-  text: string;
-  sender: "user" | "bot";
+interface User {
+  id: string;
+  name: string;
+  role: string;
 }
 
-const Message = ({ text, sender }: MessageProps) => {
+interface MessageProps {
+  user: User | null;
+  senderId: string;
+  receiverId: string;
+  text: string;
+}
+
+const Message = ({ user, senderId, receiverId, text }: MessageProps) => {
+  const currentUserId = user?.id;
+  const isSender = senderId === currentUserId;
+  const isReceiver = receiverId === currentUserId;
+  // console.log(
+  //   "user, senderId, receiverId, text : ",
+  //   user,
+  //   senderId,
+  //   receiverId,
+  //   text
+  // );
+  // console.log("currentUserId = user?.id : ", currentUserId == senderId);
+
   return (
-    <div
-      className={`flex ${sender === "user" ? "justify-end" : "justify-start"}`}
-    >
-      <div
-        className={`p-2 rounded-lg max-w-xs text-sm
-          ${
-            sender === "user"
-              ? "bg-blue-500 text-white self-end"
-              : "bg-gray-300 text-black self-start"
-          }`}
-      >
-        {text}
-      </div>
+    <div className="flex flex-col space-y-1">
+      {isSender && (
+        <div className="flex px-1 justify-end">
+          <div className="p-2 rounded-lg max-w-xs text-sm bg-blue-500 text-white self-end">
+            {text}
+          </div>
+        </div>
+      )}
+      {isReceiver && (
+        <div className="flex justify-start">
+          <div className="p-2 rounded-lg max-w-xs text-sm bg-purple-700 text-white self-start">
+            {text}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

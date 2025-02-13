@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET;
+// const EXP_JWT = process.env.EXP_JWT as string;
+// console.log(typeof process.env.EXP_JWT);
 
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is missing from the environment variables.");
@@ -21,18 +23,17 @@ export async function POST(req: NextRequest) {
   if (!isMatch)
     return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
 
-  // Generate token
+  // generate token
   const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "2h",
   });
-
   const response = NextResponse.json({ message: "Login successful" });
 
-  // Set cookie HTTP-only untuk token
+  // cookie HTTP-only untk token
   response.cookies.set("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60, // 1 jam
+    maxAge: 60 * 60,
     path: "/",
   });
 

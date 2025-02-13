@@ -1,0 +1,65 @@
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\.env
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\.vscode
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\next-env.d.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\next.config.js
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\package-lock.json
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\package.json
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\paths.txt
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\postcss.config.js
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\README.md
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\tailwind.config.js
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\tsconfig.json
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\lib
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\middleware.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\styles
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\dashboard
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\layout.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\page.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\users
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\chats
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\dashboard
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\socket
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\TaskLogs
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\tasks
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\users
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\login
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\logout
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\register
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\login\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\logout\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\auth\register\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\chats\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\dashboard\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\socket\socket.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\TaskLogs\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\tasks\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\api\users\route.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\login
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\register
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\login\page.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\auth\register\page.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\dashboard\page.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\users\edit
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\users\edit\[id]
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\app\users\edit\[id]\page.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\Communication
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskForm.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskList(masih kesulitan).tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskList.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskListComponents(masih kesulitan)
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskLog.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\Communication\Chat.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\Communication\Message.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskListComponents(masih kesulitan)\ConfirmationModal.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskListComponents(masih kesulitan)\EditDescriptionModal.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskListComponents(masih kesulitan)\TaskCard.tsx
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\components\TaskListComponents(masih kesulitan)\types.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\lib\auth.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\lib\socket.ts
+D:\New folder\Data Ridwan\DEVELOPER IT\JS\Project\todolist\src\styles\tailwind.css
