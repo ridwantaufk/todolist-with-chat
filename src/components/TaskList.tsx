@@ -76,7 +76,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
         task.id === taskId ? { ...task, teamId: userId } : task
       )
     );
-    handleUpdateAssignTo(taskId, userId); // Update to the server immediately
+    handleUpdateAssignTo(taskId, userId);
   };
 
   const handleCreatedChange = (taskId, userId) => {
@@ -85,20 +85,20 @@ export default function TaskList({ tasks, role }: TaskListProps) {
         task.id === taskId ? { ...task, leadId: userId } : task
       )
     );
-    handleUpdateCreatedBy(taskId, userId); // Update to the server immediately
+    handleUpdateCreatedBy(taskId, userId);
   };
 
   const handleBlurAssign = (taskId: string) => {
     const task = taskList.find((t) => t.id === taskId);
     if (task) {
-      handleAssignChange(taskId, task.teamId); // Save the current value to the server
+      handleAssignChange(taskId, task.teamId);
     }
   };
 
   const handleBlurCreated = (taskId: string) => {
     const task = taskList.find((t) => t.id === taskId);
     if (task) {
-      handleCreatedChange(taskId, task.leadId); // Save the current value to the server
+      handleCreatedChange(taskId, task.leadId);
     }
   };
 
@@ -201,11 +201,11 @@ export default function TaskList({ tasks, role }: TaskListProps) {
     const task = taskList.find((task) => task.id === taskId);
     if (task) {
       setEditingTask(taskId);
-      setEditedTitle(task.title); // Set initial title
-      setEditedStatus(task.status); // Set initial status
-      setEditedDescription(task.description); // Set initial description
+      setEditedTitle(task.title);
+      setEditedStatus(task.status);
+      setEditedDescription(task.description);
     }
-    setTimeout(() => descRef.current?.focus(), 0); // Focus on the textarea
+    setTimeout(() => descRef.current?.focus(), 0);
   };
 
   const handleSaveDescription = async (taskId: string) => {
@@ -219,15 +219,14 @@ export default function TaskList({ tasks, role }: TaskListProps) {
         credentials: "include",
         body: JSON.stringify({
           id: taskId,
-          title: editedTitle, // Include edited title
-          status: editedStatus, // Include edited status
-          description: editedDescription, // Include edited description
+          title: editedTitle,
+          status: editedStatus,
+          description: editedDescription,
         }),
       });
 
       if (!res.ok) throw new Error("Failed to update task");
 
-      // Update the task list to reflect the changes
       setTaskList((prevTasks) =>
         prevTasks.map((task) =>
           task.id === taskId
@@ -240,7 +239,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
             : task
         )
       );
-      setEditingTask(null); // Close the editing modal
+      setEditingTask(null);
     } catch (error) {
       console.error(error);
     } finally {
@@ -258,7 +257,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
       setTaskToSave(taskId);
       setIsConfirmOpen(true);
     } else {
-      setEditingTask(null);
+      // setEditingTask(null);
     }
   };
 
@@ -282,7 +281,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        handleCancelSave(); // Call the function to close the modal
+        handleCancelSave();
       }
     };
 
@@ -324,16 +323,16 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                 key={task.id}
                 onClick={() => {
                   handleEditDescription(task.id);
-                  setSelectedTaskId(task.id); // Set the selected task ID
+                  setSelectedTaskId(task.id);
                 }}
-                onMouseDown={() => setSelectedTaskId(task.id)} // Start zoom on mouse down
-                onMouseUp={() => setSelectedTaskId(null)} // Reset zoom on mouse up
-                onMouseLeave={() => setSelectedTaskId(null)} // Reset zoom on mouse leave
+                onMouseDown={() => setSelectedTaskId(task.id)}
+                onMouseUp={() => setSelectedTaskId(null)}
+                onMouseLeave={() => setSelectedTaskId(null)}
                 className={`inline-block text-sm font-semibold text-blue-500 mb-2 uppercase tracking-wide border-s-4 border-blue-500 rounded-full px-2 cursor-pointer transition-transform duration-300 transform ${
                   selectedTaskId === task.id ? "scale-110" : "scale-100"
                 } hover:bg-blue-500 hover:text-white hover:translate-x-2`}
                 style={{
-                  transition: "transform 0.3s ease, translate 0.3s ease", // Ensure smooth transitions
+                  transition: "transform 0.3s ease, translate 0.3s ease",
                 }}
               >
                 {task.taskCode}
@@ -350,9 +349,8 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                       if (e.key === "Enter") {
                         handleBlurTitle(task.id);
                       } else if (e.key === "Escape") {
-                        // Reset to original title instead of clearing
-                        setEditedTitle(task.title); // Reset to original title
-                        setEditingTitle(null); // Exit editing mode
+                        setEditedTitle(task.title);
+                        setEditingTitle(null);
                       }
                     }}
                     autoFocus
@@ -431,7 +429,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                   className="mt-1 block w-full py-2 px-3 rounded-md border border-gray-400 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={task.teamId || ""}
                   onChange={(e) => handleAssignChange(task.id, e.target.value)}
-                  onBlur={() => handleBlurAssign(task.id)} // Pastikan onBlur memanggil fungsi
+                  onBlur={() => handleBlurAssign(task.id)}
                 >
                   <option value="">Select a user</option>
                   {assignOptions.length > 0 ? (
@@ -456,7 +454,7 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                   className="mt-1 block w-full py-2 px-3 rounded-md border border-gray-400 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={task.leadId || ""}
                   onChange={(e) => handleCreatedChange(task.id, e.target.value)}
-                  onBlur={() => handleBlurCreated(task.id)} // Pastikan onBlur memanggil fungsi
+                  onBlur={() => handleBlurCreated(task.id)}
                 >
                   <option value="">Select a user</option>
                   {assignOptions.length > 0 ? (
@@ -513,12 +511,12 @@ export default function TaskList({ tasks, role }: TaskListProps) {
       {editingTask && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={handleCancelSave} // Close modal when background is clicked
+          onClick={handleCancelSave}
         >
           <div
             ref={modalRef}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl overflow-auto min-h-[500px]"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+            onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-semibold text-gray-800">
               Edit Task Description
@@ -530,9 +528,9 @@ export default function TaskList({ tasks, role }: TaskListProps) {
               </label>
               <input
                 type="text"
-                className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                className="mt-1 w-full bg-gray-100 text-gray-800 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"
                 value={editedTitle}
-                onChange={(e) => setEditedTitle(e.target.value)} // Update title state
+                onChange={(e) => setEditedTitle(e.target.value)}
               />
             </div>
 
@@ -541,9 +539,11 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                 Status
               </label>
               <select
-                className="mt-1 block w-full py-2 px-3 rounded-md border border-gray-400 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={editedStatus} // Use editedStatus state
-                onChange={(e) => setEditedStatus(e.target.value)} // Update status state
+                className={`mt-1 block w-full py-2 px-3 rounded-md ${getStatusStyles(
+                  editedStatus
+                )} border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                value={editedStatus}
+                onChange={(e) => setEditedStatus(e.target.value)}
               >
                 <option value="NOT_STARTED">Not Started</option>
                 <option value="ON_PROGRESS">On Progress</option>
@@ -557,9 +557,9 @@ export default function TaskList({ tasks, role }: TaskListProps) {
                 Description
               </label>
               <textarea
-                className="mt-1 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[300px] max-h-[500px] overflow-y-auto resize-none"
+                className="mt-1 w-full bg-gray-100 text-gray-800 border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-200 min-h-[300px] max-h-[500px] overflow-y-auto resize-none"
                 value={editedDescription}
-                onChange={(e) => setEditedDescription(e.target.value)} // Update description state
+                onChange={(e) => setEditedDescription(e.target.value)}
               />
             </div>
 
