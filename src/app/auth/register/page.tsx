@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import "../../../styles/tailwind.css";
+import "@/styles/tailwind.css";
 import { FiUserPlus } from "react-icons/fi";
 
 export default function Register() {

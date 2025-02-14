@@ -36,14 +36,15 @@ const formatDateWIB = (timestamp: string) => {
 };
 
 const getStatusStyle = (status: string) => {
+  console.log("status : ", status);
   switch (status) {
-    case "Task Created (Status: NOT_STARTED)":
+    case "Task Created (Status: Not Started)":
       return "bg-gray-300 text-gray-800";
-    case "Task Progressed (Status: ON_PROGRESS)":
+    case "Task Progressed (Status: On Progress)":
       return "bg-blue-300 text-blue-800";
-    case "Task Completed (Status: DONE)":
+    case "Task Completed (Status: Done)":
       return "bg-green-300 text-green-800";
-    case "Task Rejected (Status: REJECT)":
+    case "Task Rejected (Status: Reject)":
       return "bg-red-300 text-red-800";
     default:
       return "bg-gray-100 text-gray-800";

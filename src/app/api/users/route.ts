@@ -2,19 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
+import { verifyToken } from "@/lib/auth";
 
 const prisma = new PrismaClient();
-
-export async function verifyToken(token: string) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    const { userId, role } = payload as { userId: string; role: string };
-    return { userId, role };
-  } catch (error) {
-    throw new Error("Invalid token");
-  }
-}
 
 function getTokenFromCookie(req: NextRequest): string | null {
   const cookieHeader = req.headers.get("cookie");
@@ -110,7 +100,7 @@ export async function PUT(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { id, name, email, password } = body;
+    const { id, name, email, password, role } = body;
     // console.log("id, name, email, password : ", id, name, email, password);
 
     if (!id) {
@@ -144,6 +134,7 @@ export async function PUT(req: NextRequest) {
       data: {
         name: name || existingUser.name,
         email: email || existingUser.email,
+        role: role || existingUser.role,
         password: hashedPassword,
       },
     });

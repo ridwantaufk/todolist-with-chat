@@ -1,21 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import { verifyToken } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 const prisma = new PrismaClient();
-
-export async function verifyToken(token: string) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    const { userId, role } = payload as { userId: string; role: string };
-    return { userId, role };
-  } catch (error) {
-    throw new Error("Invalid token");
-  }
-}
 
 // ambil token dari cookie
 function getTokenFromCookie(req: NextRequest): string | null {
@@ -167,9 +157,9 @@ export async function PUT(req: NextRequest) {
         case "ON_PROGRESS":
           return "On Progress";
         case "DONE":
-          return "Completed";
+          return "Done";
         case "REJECT":
-          return "Rejected";
+          return "Reject";
         default:
           return "Unknown Status";
       }
