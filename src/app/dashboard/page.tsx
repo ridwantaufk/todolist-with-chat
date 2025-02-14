@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import TaskForm from "../../components/TaskForm";
-import TaskList from "../../components/TaskList";
-import TaskLog from "../../components/TaskLog";
-import Chat from "../../components/Communication/Chat";
-import "../../styles/tailwind.css";
+import TaskForm from "@/components/TaskForm";
+import TaskList from "@/components/TaskList";
+import TaskLog from "@/components/TaskLog";
+import Chat from "@/components/Communication/Chat";
+import "@/styles/tailwind.css";
 import { FiLogOut } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 import { FaBell } from "react-icons/fa";

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import "../../../styles/tailwind.css";
+import "@/styles/tailwind.css";
 import { FiLogIn } from "react-icons/fi";
 
 export default function Login() {

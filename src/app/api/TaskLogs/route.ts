@@ -1,20 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import { verifyToken } from "@/lib/auth";
 
 const prisma = new PrismaClient();
-
-// Verifikasi token JWT
-export async function verifyToken(token: string) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    const { userId, role } = payload as { userId: string; role: string };
-    return { userId, role };
-  } catch (error) {
-    throw new Error("Invalid token");
-  }
-}
 
 // Ambil token dari cookie
 function getTokenFromCookie(req: NextRequest): string | null {

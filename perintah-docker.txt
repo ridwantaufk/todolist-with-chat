@@ -1,0 +1,67 @@
+🔄 Build Ulang & Jalankan
+    Pastikan di .env menggunakan @db , @localhost untuk postgres lokal
+
+    1️⃣ Pastikan kamu ada di direktori project, lalu build ulang
+
+        docker-compose up -d --build
+
+        Ini akan membangun ulang Next.js dan PostgreSQL dari nol.
+
+    2️⃣ Cek apakah container berjalan
+
+        docker ps
+
+        Pastikan todolist (Next.js) dan postgres_db (PostgreSQL) berjalan.
+
+    3️⃣ Jalankan Prisma Migration (Buat Database)
+
+        docker exec -it todolist npx prisma migrate dev --name init
+
+    4️⃣ (Opsional) Isi Database dengan Seeder
+
+        docker exec -it todolist npx prisma db seed
+
+
+🛑 Hapus Semua Container & Data
+
+    1️⃣ Hentikan dan hapus semua container
+
+        docker-compose down -v --remove-orphans
+
+        1. -v: Menghapus volumes juga (data PostgreSQL akan hilang).
+        2. --remove-orphans: Hapus container yang tidak ada di docker-compose.yml.
+
+    2️⃣ Hapus semua volume manual (jika masih ada)
+
+        docker volume prune -f
+
+    3️⃣ Hapus semua network yang dibuat oleh Docker Compose
+
+        docker network prune -f
+
+    4️⃣ (Opsional) Hapus semua image yang tidak dipakai
+
+        docker image prune -a -f
+
+
+
+🔎 kontainer yg sedang berjalan :
+        docker ps
+    melihat semua termasuk yg berhenti :
+        docker ps -a
+    Masuk ke container PostgreSQL :
+        docker exec -it nama_kontainer_db psql -U postgres -d todolist
+    Jalankan migrasi jika tabel belum ada :
+        docker exec -it todolist sh
+        npx prisma migrate dev --name init
+    Cek list tabel :
+        docker exec -it nama_kontainer_db psql -U postgres -d todolist -c "\dt"
+
+🗃️ Import database ke docker :
+        1. pg_dump -U postgres -d todolist -f todolist.sql
+        2. docker cp todolist.sql nama_kontainer_db:/todolist.sql
+        3. docker exec -it todolist sh
+        4. psql -U postgres -d todolist -f /todolist.sql
+    Drop dulu kalo database konflik atau error :
+        1. SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'todolist';
+        2. DROP DATABASE todolist

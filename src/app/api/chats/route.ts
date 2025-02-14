@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { Client } from "pg";
 import { jwtVerify } from "jose";
+import { verifyToken } from "@/lib/auth";
 
 const pgClient = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -11,16 +12,6 @@ pgClient.connect();
 pgClient.query("LISTEN new_message");
 
 const prisma = new PrismaClient();
-
-async function verifyToken(token: string) {
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload;
-  } catch (error) {
-    return null;
-  }
-}
 
 function getTokenFromCookie(req: NextRequest): string | null {
   const cookieHeader = req.headers.get("cookie");

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import "../../../../styles/tailwind.css";
+import "@/styles/tailwind.css";
 import { FiRefreshCw } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
 
