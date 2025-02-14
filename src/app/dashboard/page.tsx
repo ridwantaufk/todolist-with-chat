@@ -11,12 +11,20 @@ import { FiLogOut } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 import { FaBell } from "react-icons/fa";
 
+interface Message {
+  id?: string | number;
+  text: string;
+  receiverId: string;
+  senderId: string;
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const [isTaskLogOpen, setIsTaskLogOpen] = useState(false);
   const router = useRouter();
@@ -90,18 +98,29 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    const clearSessionStorage = () => sessionStorage.clear();
+
+    window.addEventListener("beforeunload", clearSessionStorage);
+    return () =>
+      window.removeEventListener("beforeunload", clearSessionStorage);
+  }, []);
+
+  useEffect(() => {
     const handleNewMessage = () => {
       if (!isChatVisible) {
+        console.log("ichatVisible : ", isChatVisible);
         setHasNewMessage(true);
         playNotificationSound();
       }
     };
+
     window.addEventListener("newChatMessage", handleNewMessage);
+    console.log("messages : ", messages);
 
     return () => {
       window.removeEventListener("newChatMessage", handleNewMessage);
     };
-  }, [isChatVisible]);
+  }, [messages]);
 
   const playNotificationSound = () => {
     const audio = new Audio("/sounds/iphone-notif.mp3");
@@ -128,7 +147,10 @@ export default function Dashboard() {
         <Chat
           isChatVisible={isChatVisible}
           setIsChatVisible={setIsChatVisible}
-        />{" "}
+          setHasNewMessage={setHasNewMessage}
+          messages={messages}
+          setMessages={setMessages}
+        />
       </div>
       <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl p-8 px-6 space-y-4">
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-6">

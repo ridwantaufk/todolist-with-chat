@@ -27,12 +27,22 @@ interface Message {
 
 interface ChatProps {
   receiverState: Receiver | null;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  messages: Message[] | [];
+  isChatVisible: boolean;
+  setIsChatVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Chat = ({ receiverState }: ChatProps) => {
+const Chat = ({
+  receiverState,
+  messages,
+  setMessages,
+  isChatVisible,
+  setIsChatVisible,
+}: ChatProps) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  // const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [user, setUser] = useState<User | null>(null);
@@ -187,7 +197,11 @@ const Chat = ({ receiverState }: ChatProps) => {
   };
 
   return (
-    <div className="relative flex flex-col h-96 w-80 bg-gray-100 rounded-lg shadow-lg p-4">
+    <div
+      className={`relative ${
+        isChatVisible ? "flex" : "hidden"
+      } flex-col h-96 w-80 bg-gray-100 rounded-lg shadow-lg p-4`}
+    >
       <div
         className={`absolute rounded-full flex flex-col items-center justify-center transition-all duration-300 ease-in-out`}
         style={{
@@ -295,9 +309,15 @@ const Chat = ({ receiverState }: ChatProps) => {
 const ChatFeature = ({
   isChatVisible,
   setIsChatVisible,
+  setHasNewMessage,
+  messages,
+  setMessages,
 }: {
   isChatVisible: boolean;
+  setHasNewMessage: React.Dispatch<React.SetStateAction<boolean>>;
   setIsChatVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  messages: Message[] | [];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }) => {
   const [receiverState, setReceiverState] = useState<Receiver | null>(null);
 
@@ -310,6 +330,7 @@ const ChatFeature = ({
           if (storedReceiver) {
             setReceiverState(JSON.parse(storedReceiver));
           }
+          setHasNewMessage(false);
         }}
         className="bg-blue-600 text-white rounded-full p-3 shadow-lg transition-transform duration-300 hover:scale-105 relative"
       >
@@ -323,11 +344,17 @@ const ChatFeature = ({
         )}
       </button>
 
-      {isChatVisible && (
-        <div className="mt-2">
-          <Chat receiverState={receiverState} />
-        </div>
-      )}
+      {/* {isChatVisible && ( */}
+      <div className="mt-2">
+        <Chat
+          receiverState={receiverState}
+          messages={messages}
+          setMessages={setMessages}
+          isChatVisible={isChatVisible}
+          setIsChatVisible={setIsChatVisible}
+        />
+      </div>
+      {/* )} */}
     </div>
   );
 };
